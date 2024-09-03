@@ -19,7 +19,7 @@ def generate_launch_description():
     moveit_config = (
         MoveItConfigsBuilder("manipulator", package_name="mobile_bot")
         .robot_description(file_path=os.path.join(
-            get_package_share_directory("manipulator"),
+            get_package_share_directory("mobile_bot"),
             "description",
             "manipulator",
             "urdf",
