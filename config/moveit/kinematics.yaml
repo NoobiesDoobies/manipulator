@@ -1,0 +1,40 @@
+arm:
+  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
+  kinematics_solver_search_resolution: 0.05
+  kinematics_solver_timeout: 0.005
+  kinematics_solver_attempts: 3
+  kinematics_solver_position_only_ik: false
+  # kinematics_solver_consistency_limit: 0.0
+  # kinematics_solver_ignore_warnings: false
+  # kinematics_solver_attempts_with_full_jacobian: 100
+  # kinematics_solver_verbose: false
+  # kinematics_solver_enable_segment_position_ik: false
+  # kinematics_solver_enable_segment_orientation_ik: false
+  # kinematics_solver_enable_chain_ik: true
+  # kinematics_solver_enable_chain_fk: true
+  # kinematics_solver_enable_chain_distance: true
+  # kinematics_solver_enable_chain_consistency: true
+  # kinematics_solver_enable_chain_kinematics: true
+  # kinematics_solver_enable_position_ik: true
+  # kinematics_solver_enable_orientation_ik: true
+  # kinematics_solver_enable_laser_ik: false
+  # kinematics_solver_enable_projected_ik: false
+  # kinematics_solver_enable_projected_ik_singularity: false
+  # kinematics_solver_enable_projected_ik_nullspace: false
+  # kinematics_solver_enable_projected_ik_nullspace_singularity: false
+  # kinematics_solver_enable_projected_ik_joint_nullspace: false
+  # kinematics_solver_enable_projected_ik_joint_nullspace_singularity: false
+  # kinematics_solver_enable_projected_ik_joint_nullspace_singularity_pseudo_inverse: false
+  # kinematics_solver_enable_projected_ik_joint_nullspace_singularity_damped: false
+  # kinematics_solver_enable_projected_ik_joint_nullspace_singularity_pseudo_inverse_damped: false
+  # kinematics_solver_enable_projected_ik_joint_nullspace_singularity_pseudo_inverse_damped_transpose: false
+  # kinematics_solver_enable_projected_ik_joint_nullspace_singularity_pseudo_inverse_damped_pinv: false
+  # kinematics_solver_enable_projected_ik_joint_nullspace_singularity_pseudo_inverse_damped_transpose_pinv: false
+  # kinematics_solver_enable_projected_ik_joint_nullspace_singularity_pseudo_inverse_damped_clamped: false
+  # kinematics_solver_enable_projected_ik_joint_nullspace_singularity_pseudo_inverse_damped_transpose_clamped: false
+  # kinematics_solver_enable_projected_ik_joint_nullspace_singularity_pseudo_inverse_damped_clamped_pinv: false
+  # kinematics_solver_enable_projected_ik_joint_nullspace_singularity_pseudo_inverse_damped_transpose_clamped_pinv: false
+  # kinematics_solver_enable_projected_ik_joint_nullspace_singularity_pseudo_inverse
+  # kinematics_solver_enable_projected_ik_joint_nullspace_singularity_damped
+  # kinematics_solver_enable_projected_ik_joint_nullspace_singularity_pseudo_inverse_damped
+  # kinematics_solver_enable_projected_ik_joint_nullspace_singularity_pseudo_inverse_damped_transpose

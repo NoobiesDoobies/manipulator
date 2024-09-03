@@ -22,14 +22,14 @@ def generate_launch_description():
             launch_arguments={"is_sim": "True"}.items()
         )
     
-    # moveit = IncludeLaunchDescription(
-    #         os.path.join(
-    #             get_package_share_directory("arduinobot_moveit"),
-    #             "launch",
-    #             "moveit.launch.py"
-    #         ),
-    #         launch_arguments={"is_sim": "True"}.items()
-    #     )
+    moveit = IncludeLaunchDescription(
+            os.path.join(
+                get_package_share_directory("manipulator"),
+                "launch",
+                "moveit.launch.py"
+            ),
+            launch_arguments={"is_sim": "True"}.items()
+        )
     
     # remote_interface = IncludeLaunchDescription(
     #         os.path.join(
@@ -42,6 +42,6 @@ def generate_launch_description():
     return LaunchDescription([
         gazebo,
         controller,
-        # moveit,
+        moveit,
         # remote_interface,
     ])
