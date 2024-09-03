@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="omnibot_gazebo" params="prefix">
+
+    <!-- =============== Gazebo =============== -->
+    <gazebo>
+
+      <!-- <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+         <parameters>$(find slam_bot)/config/omnibot_controllers.yaml</parameters>
+      </plugin>      -->
+       <!-- <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+        <parameters>$(find slam_bot)/config/omnibot_controllers.yaml</parameters>
+        <parameters>$(find slam_bot)/config/gaz_ros2_ctl_use_sim.yaml</parameters>
+      </plugin> -->
+      <!-- <plugin filename="ign_ros2_control-system"
+      name="ign_ros2_control::IgnitionROS2ControlPlugin">
+
+      <plugin filename="ignition-gazebo-sensors-system" name="ignition::gazebo::systems::Sensors">
+        <render_engine>ogre2</render_engine>
+      </plugin> -->
+    </gazebo>
+
+
+  </xacro:macro>
+
+</robot>

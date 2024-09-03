@@ -22,10 +22,9 @@ def generate_launch_description():
             [
                 "xacro ",
                 os.path.join(
-                    get_package_share_directory("manipulator"),
+                    get_package_share_directory("mobile_bot"),
                     "description",
-                    "urdf",
-                    "manipulator.urdf.xacro",
+                    "robot.urdf.xacro",
                 ),
                 " is_sim:=True"
             ]
@@ -47,13 +46,20 @@ def generate_launch_description():
             {"robot_description": robot_description,
              "use_sim_time": is_sim},
             os.path.join(
-                get_package_share_directory("manipulator"),
+                get_package_share_directory("mobile_bot"),
                 "config",
                 "ros2_control_params.yaml",
             ),
         ],
         condition=UnlessCondition(is_sim),
     )
+
+    omni_drive_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["omni_wheel_controller"],
+    )
+
 
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
@@ -82,6 +88,7 @@ def generate_launch_description():
             is_sim_arg,
             robot_state_publisher_node,
             controller_manager,
+            omni_drive_spawner,
             joint_state_broadcaster_spawner,
             arm_controller_spawner,
             gripper_controller_spawner,

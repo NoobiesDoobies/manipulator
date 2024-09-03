@@ -7,7 +7,7 @@ from ament_index_python.packages import get_package_share_directory
 def generate_launch_description():
     gazebo = IncludeLaunchDescription(
             os.path.join(
-                get_package_share_directory("manipulator"),
+                get_package_share_directory("mobile_bot"),
                 "launch",
                 "gazebo.launch.py"
             )
@@ -15,7 +15,7 @@ def generate_launch_description():
     
     controller = IncludeLaunchDescription(
             os.path.join(
-                get_package_share_directory("manipulator"),
+                get_package_share_directory("mobile_bot"),
                 "launch",
                 "controller.launch.py"
             ),
@@ -24,7 +24,7 @@ def generate_launch_description():
     
     moveit = IncludeLaunchDescription(
             os.path.join(
-                get_package_share_directory("manipulator"),
+                get_package_share_directory("mobile_bot"),
                 "launch",
                 "moveit.launch.py"
             ),

@@ -5,11 +5,8 @@
     <xacro:arg name="is_sim" default="true"/>
 
     <!-- Include Gazebo Parameters -->
-    <xacro:include filename="$(find manipulator)/description/urdf/manipulator_gazebo.xacro" /> 
+    <xacro:include filename="$(find mobile_bot)/description/manipulator/urdf/manipulator_gazebo.xacro" /> 
 
-    <!-- Include ros2_control Plugins -->
-    <xacro:include filename="$(find manipulator)/description/urdf/ros2_control.xacro" /> 
-    
     <!-- Useful XACRO Variables (Properties) -->
     <xacro:property name="PI" value="3.14159265359" />
     <xacro:property name="effort" value="30.0" />
@@ -37,20 +34,20 @@
 
 
     <!-- Links -->
-    <link name="world"/>
+    <!-- <link name="world"/> -->
 
-    <link name="base_link">
+    <link name="manipulator_base_link">
         <xacro:default_inertial mass="1.0"/>
         <visual>
             <origin rpy="0 0 0" xyz="-0.5 -0.5 0"/>
             <geometry>
-                <mesh filename="package://manipulator/description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://mobile_bot/description/manipulator/meshes/basement.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
         <collision>
             <origin rpy="0 0 0" xyz="-0.5 -0.5 0"/>
             <geometry>
-                <mesh filename="package://manipulator/description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://mobile_bot/description/manipulator/meshes/basement.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </collision>
     </link>
@@ -60,13 +57,13 @@
         <visual>
             <origin rpy="0 0 0" xyz="-0.39 -0.39 -0.56"/>
             <geometry>
-                <mesh filename="package://manipulator/description/meshes/base_plate.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://mobile_bot/description/manipulator/meshes/base_plate.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
         <collision>
             <origin rpy="0 0 0" xyz="-0.39 -0.39 -0.56"/>
             <geometry>
-                <mesh filename="package://manipulator/description/meshes/base_plate.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://mobile_bot/description/manipulator/meshes/base_plate.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </collision>
     </link>
@@ -76,13 +73,13 @@
         <visual>
             <origin rpy=" 0 -${PI / 2} ${PI / 2}" xyz="0.19 0.06 -0.08"/>
             <geometry>
-                <mesh filename="package://manipulator/description/meshes/forward_drive_arm.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://mobile_bot/description/manipulator/meshes/forward_drive_arm.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
         <collision>
             <origin rpy=" 0 -${PI / 2} ${PI / 2}" xyz="0.19 0.06 -0.08"/>
             <geometry>
-                <mesh filename="package://manipulator/description/meshes/forward_drive_arm.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://mobile_bot/description/manipulator/meshes/forward_drive_arm.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </collision>
     </link>
@@ -92,13 +89,13 @@
         <visual>
             <origin rpy="${PI / 2} 0 ${PI / 2}" xyz="-0.03 -0.4 -0.06"/>
             <geometry>
-                <mesh filename="package://manipulator/description/meshes/horizontal_arm.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://mobile_bot/description/manipulator/meshes/horizontal_arm.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
         <collision>
             <origin rpy="${PI / 2} 0 ${PI / 2}" xyz="-0.03 -0.4 -0.06"/>
             <geometry>
-                <mesh filename="package://manipulator/description/meshes/horizontal_arm.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://mobile_bot/description/manipulator/meshes/horizontal_arm.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </collision>
     </link>
@@ -108,13 +105,13 @@
         <visual>
             <origin rpy="0 0 ${PI / 2}" xyz="0 -0.05 -0.15"/>
             <geometry>
-                <mesh filename="package://manipulator/description/meshes/claw_support.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://mobile_bot/description/manipulator/meshes/claw_support.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
         <collision>
             <origin rpy="0 0 ${PI / 2}" xyz="0 -0.05 -0.15"/>
             <geometry>
-                <mesh filename="package://manipulator/description/meshes/claw_support.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://mobile_bot/description/manipulator/meshes/claw_support.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </collision>
     </link>
@@ -124,13 +121,13 @@
         <visual>
             <origin rpy="0 0 -${PI / 2}" xyz="-0.1 0.50 -0.1"/>
             <geometry>
-                <mesh filename="package://manipulator/description/meshes/right_finger.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://mobile_bot/description/manipulator/meshes/right_finger.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
         <collision>
             <origin rpy="0 0 -${PI / 2}" xyz="-0.1 0.50 -0.1"/>
             <geometry>
-                <mesh filename="package://manipulator/description/meshes/right_finger.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://mobile_bot/description/manipulator/meshes/right_finger.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </collision>
     </link>
@@ -140,13 +137,13 @@
         <visual>
             <origin rpy="0 0 -${PI / 2}" xyz="-0.04 0.50 -0.1"/>
             <geometry>
-                <mesh filename="package://manipulator/description/meshes/left_finger.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://mobile_bot/description/manipulator/meshes/left_finger.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
         <collision>
             <origin rpy="0 0 -${PI / 2}" xyz="-0.04 0.50 -0.1"/>
             <geometry>
-                <mesh filename="package://manipulator/description/meshes/left_finger.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://mobile_bot/description/manipulator/meshes/left_finger.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </collision>
     </link>
@@ -156,27 +153,21 @@
         <visual>
             <origin rpy="-1.57 0 -1.57" xyz="-0.1 0.125 0.15"/>
             <geometry>
-                <mesh filename="package://manipulator/description/meshes/pi_camera.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://mobile_bot/description/manipulator/meshes/pi_camera.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
         <collision>
             <origin rpy="-1.57 0 -1.57" xyz="-0.1 0.125 0.15"/>
             <geometry>
-                <mesh filename="package://manipulator/description/meshes/pi_camera.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://mobile_bot/description/manipulator/meshes/pi_camera.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </collision>
     </link>
 
     
-    <!-- Joints -->  
-    <joint name="virtual_joint" type="fixed">
-        <parent link="world"/>
-        <child link="base_link"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-    </joint> 
 
     <joint name ="joint_1" type="revolute">
-        <parent link="base_link"/>
+        <parent link="manipulator_base_link"/>
         <child link = "base_plate"/>
         <origin xyz="0 0 0.307"/>
         <axis xyz="0 0 1"/>
@@ -228,7 +219,7 @@
     </joint>
 
     <joint name ="rgb_camera_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="manipulator_base_link"/>
         <child link = "rgb_camera"/>
         <origin xyz="0 0.45 0.2" rpy="0 -0.5 1.57"/>
     </joint>
