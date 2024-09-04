@@ -108,6 +108,11 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
+install(PROGRAMS
+  behaviour_trees/pickup_box.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 # rosidl_generate_interfaces(${PROJECT_NAME}
 #   "action/ManipulatorTask.action"
 #   DEPENDENCIES builtin_interfaces geometry_msgs std_msgs sensor_msgs unique_identifier_msgs action_msgs

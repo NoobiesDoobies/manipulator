@@ -38,7 +38,8 @@ def generate_launch_description():
         # "worlds", "maze_3_6x6.world"
         # "worlds", "self_made_maze.world"
         # "worlds", "cafe.world"
-        "worlds", "empty.world"
+        # "worlds", "empty.world"
+        "worlds", "aruco_on_table2.world"
     )
 
     start_gazebo_server = IncludeLaunchDescription(
