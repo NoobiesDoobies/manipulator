@@ -22,8 +22,13 @@ find_package(rosidl_default_generators REQUIRED)
 find_package(builtin_interfaces REQUIRED)
 find_package(unique_identifier_msgs REQUIRED)
 find_package(manipulator_msgs REQUIRED)
+find_package(behaviortree_cpp_v3 REQUIRED)
 
 add_library(task_server SHARED src/task_server.cpp)
+
+include_directories(
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 
 target_include_directories(task_server PRIVATE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -64,6 +69,28 @@ install(TARGETS
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
+
+
+add_executable(pickup_box_bt src/pickup_box_bt.cpp)
+ament_target_dependencies(pickup_box_bt
+  "rclcpp"
+  "rclcpp_action"
+  "rclcpp_components"
+  "moveit_ros_planning_interface"
+  "unique_identifier_msgs"
+  "builtin_interfaces"
+  "geometry_msgs"
+  "std_msgs"
+  "sensor_msgs"
+  "action_msgs"
+  "manipulator_msgs"
+  "behaviortree_cpp_v3"
+)
+
+install(TARGETS
+  pickup_box_bt
+  DESTINATION lib/${PROJECT_NAME})
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
@@ -77,7 +104,7 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  DIRECTORY description launch config rviz worlds
+  DIRECTORY description launch config rviz worlds behaviour_trees
   DESTINATION share/${PROJECT_NAME}
 )
 
