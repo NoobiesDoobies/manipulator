@@ -65,9 +65,9 @@ namespace mobile_bot_remote
             auto gripper_move_group = moveit::planning_interface::MoveGroupInterface(shared_from_this(), "gripper");
 
             moveit::core::RobotStatePtr arm_current_state = arm_move_group.getCurrentState();
-            auto arm_model_group = arm_move_group.getCurrentState()->getRobotModel()->getJointModelGroup(arm_move_group.getName());
-            std::vector<double> arm_joint_group_positions;
-            arm_current_state->copyJointGroupPositions(arm_model_group, arm_joint_group_positions);
+            // auto arm_model_group = arm_move_group.getCurrentState()->getRobotModel()->getJointModelGroup(arm_move_group.getName());
+            // std::vector<double> arm_joint_group_positions;
+            // arm_current_state->copyJointGroupPositions(arm_model_group, arm_joint_group_positions);
 
 
             // Define joint goals
@@ -81,9 +81,13 @@ namespace mobile_bot_remote
                 arm_joint_goal = {0.0, 0.0, 0.0};
                 gripper_joint_goal = {-1.0, 1.0};
             } 
-            else if(task_string == "lower-arm"){
+            else if(task_string == "lower-arm-and-grip"){
                 arm_joint_goal = {-0.11, -1, 0.212};
-                gripper_joint_goal = {0.0, 0.0};
+                gripper_joint_goal = {-0.25, 0.25};
+            }
+            else if(task_string == "raise-arm-and-grip"){
+                arm_joint_goal = {0.0, 0.0, 0.0};
+                gripper_joint_goal = {-0.25, 0.25};
             }
             else{
                 RCLCPP_ERROR(get_logger(), "Invalid task string");

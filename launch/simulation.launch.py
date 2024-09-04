@@ -32,14 +32,26 @@ def generate_launch_description():
             launch_arguments={"is_sim": "True"}.items(),
         )
     
-    remote_interface = IncludeLaunchDescription(
-            os.path.join(
-                get_package_share_directory("mobile_bot"),
-                "launch",
-                "remote_interface.launch.py"
-            ),
-        )
-
+    # remote_interface = IncludeLaunchDescription(
+    #         os.path.join(
+    #             get_package_share_directory("mobile_bot"),
+    #             "launch",
+    #             "remote_interface.launch.py"
+    #         ),
+    #     )
+    rviz_config = os.path.join(
+        get_package_share_directory("mobile_bot"),
+            "rviz",
+            "simulation_config.rviz",
+    )
+    rviz_node = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        output="log",
+        arguments=["-d", rviz_config],
+  
+    )
 
     
     teleop_keyboard = IncludeLaunchDescription(
@@ -54,6 +66,7 @@ def generate_launch_description():
         gazebo,
         controller,
         moveit,
-        remote_interface,
+        rviz_node,
+        # remote_interface,
         teleop_keyboard,
     ])

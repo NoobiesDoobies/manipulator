@@ -207,7 +207,7 @@
         </collision>
     </link>
 
-    <link name="rgb_camera">
+    <!-- <link name="rgb_camera">
         <xacro:default_inertial mass="0.001"/>
         <visual>
             <origin rpy="-1.57 0 -1.57" xyz="-0.1 0.125 0.15"/>
@@ -221,7 +221,7 @@
                 <mesh filename="package://mobile_bot/description/manipulator/meshes/pi_camera.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </collision>
-    </link>
+    </link> -->
 
     
 
@@ -276,12 +276,12 @@
                effort="${effort}" velocity="${velocity}"/>
         <mimic joint="joint_4" multiplier="-1"/>
     </joint>
-
+<!-- 
     <joint name ="rgb_camera_joint" type="fixed">
         <parent link="manipulator_base_link"/>
         <child link = "rgb_camera"/>
         <origin xyz="0 0.45 0.2" rpy="0 -0.5 1.57"/>
-    </joint>
+    </joint> -->
 
 
     <!-- Transmissions-->
