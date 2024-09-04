@@ -54,7 +54,7 @@ omni_wheel_controller:
     omni_wheel_names  : ['wheel0_shaft_joint', 'wheel1_shaft_joint', 'wheel2_shaft_joint', 'wheel3_shaft_joint']
     omni_wheel_angle  : [0.785398, 2.356194, -2.356194, -0.785398]
 
-    omni_wheel_distance : 1.5
+    omni_wheel_distance : 2.12132
     wheel_radius : 0.15
 
     odom_frame_id: odom
@@ -83,8 +83,8 @@ omni_wheel_controller:
     angular.z.has_velocity_limits: true
     angular.z.has_acceleration_limits: true
     angular.z.has_jerk_limits: true
-    angular.z.max_velocity: 0.1
-    angular.z.min_velocity: -0.1
+    angular.z.max_velocity: 0.02
+    angular.z.min_velocity: -0.02
     angular.z.max_acceleration: 2.0
     angular.z.min_acceleration: -2.0
     angular.z.max_jerk: 0.5

@@ -43,7 +43,7 @@
     </link>
     <gazebo reference="${prefix}_housing_link">
       <material>Gazebo/Gray</material>
-      <mu1>0.8</mu1>
+      <mu1>0.9</mu1>
       <mu2>0.1</mu2>
       <fdir1>0 1.0 0</fdir1>
       <kp value="30000000.0" />
