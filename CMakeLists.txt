@@ -26,7 +26,10 @@ add_library(task_server SHARED src/task_server.cpp)
 
 target_include_directories(task_server PRIVATE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>)
+  $<INSTALL_INTERFACE:include>
+  ${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp
+  )
+  
 
 target_compile_definitions(task_server
     PRIVATE "TASK_SERVER_CPP_BUILDING_DLL")
@@ -36,6 +39,11 @@ target_compile_definitions(task_server
     "rclcpp_components"
     "moveit_ros_planning_interface"
     "unique_identifier_msgs"
+    "builtin_interfaces"
+    "geometry_msgs"
+    "std_msgs"
+    "sensor_msgs"
+    "action_msgs"
     )
   rclcpp_components_register_node(task_server 
     PLUGIN "mobile_bot::TaskServer" 
