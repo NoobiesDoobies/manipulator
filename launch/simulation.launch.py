@@ -39,9 +39,18 @@ def generate_launch_description():
     #         ),
     #     )
     
+    teleop_keyboard = IncludeLaunchDescription(
+        os.path.join(
+            get_package_share_directory("mobile_bot"),
+            "launch",
+            "teleop_keyboard.launch.py"
+        )
+    )
+
     return LaunchDescription([
         gazebo,
         controller,
         moveit,
+        teleop_keyboard
         # remote_interface,
     ])

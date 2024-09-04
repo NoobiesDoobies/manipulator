@@ -38,7 +38,7 @@ def generate_launch_description():
         # "worlds", "maze_3_6x6.world"
         # "worlds", "self_made_maze.world"
         # "worlds", "cafe.world"
-        "worlds", "furnished_office.world"
+        "worlds", "empty.world"
     )
 
     start_gazebo_server = IncludeLaunchDescription(
@@ -71,7 +71,7 @@ def generate_launch_description():
         env_var,
         model_arg,
         start_gazebo_server,
-        start_gazebo_client,
+        # start_gazebo_client,
         robot_state_publisher_node,
         spawn_robot
     ])

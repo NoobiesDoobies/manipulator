@@ -23,28 +23,28 @@
     <link name="${prefix}_housing_link">
       <visual>
         <geometry>
-          <cylinder length="0.040" radius="0.15" /> 
+          <cylinder length="0.1" radius="0.15" /> 
         </geometry>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <material name="gray"/>
       </visual>
       <collision>
         <geometry>
-          <cylinder length="0.040" radius="0.15" /> 
+          <cylinder length="0.1" radius="0.15" /> 
         </geometry>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <material name="gray"/>
       </collision>
 
       <inertial>
-        <mass value="1.288"/>
+        <mass value="3.5"/>
         <inertia ixx="0.00235" ixy="0" ixz="0" iyy="0.00235" iyz="0" izz="0.00004"/>
       </inertial>  
     </link>
     <gazebo reference="${prefix}_housing_link">
       <material>Gazebo/Gray</material>
       <mu1>0.8</mu1>
-      <mu2>0.05</mu2>
+      <mu2>0.1</mu2>
       <fdir1>0 1.0 0</fdir1>
       <kp value="30000000.0" />
       <kd value="50000000.0" />
