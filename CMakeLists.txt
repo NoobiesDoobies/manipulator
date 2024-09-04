@@ -21,6 +21,7 @@ find_package(rclpy REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(builtin_interfaces REQUIRED)
 find_package(unique_identifier_msgs REQUIRED)
+find_package(manipulator_msgs REQUIRED)
 
 add_library(task_server SHARED src/task_server.cpp)
 
@@ -44,9 +45,11 @@ target_compile_definitions(task_server
     "std_msgs"
     "sensor_msgs"
     "action_msgs"
+    "manipulator_msgs"
+    
     )
   rclcpp_components_register_node(task_server 
-    PLUGIN "mobile_bot::TaskServer" 
+    PLUGIN "mobile_bot_remote::TaskServer" 
     EXECUTABLE task_server_node
 )
 
@@ -78,9 +81,9 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
-rosidl_generate_interfaces(${PROJECT_NAME}
-  "msgs/action/ManipulatorTask.action"
-  DEPENDENCIES builtin_interfaces geometry_msgs std_msgs sensor_msgs unique_identifier_msgs action_msgs
-)
+# rosidl_generate_interfaces(${PROJECT_NAME}
+#   "action/ManipulatorTask.action"
+#   DEPENDENCIES builtin_interfaces geometry_msgs std_msgs sensor_msgs unique_identifier_msgs action_msgs
+# )
 
 ament_package()

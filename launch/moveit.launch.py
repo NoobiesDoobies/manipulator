@@ -21,9 +21,7 @@ def generate_launch_description():
         .robot_description(file_path=os.path.join(
             get_package_share_directory("mobile_bot"),
             "description",
-            "manipulator",
-            "urdf",
-            "manipulator.urdf.xacro"
+            "robot.urdf.xacro"
             )
         )
         .robot_description_semantic(file_path="config/moveit/manipulator.srdf")
@@ -68,6 +66,6 @@ def generate_launch_description():
         [
             is_sim_arg,
             move_group_node, 
-            # rviz_node
+            rviz_node
         ]
     )

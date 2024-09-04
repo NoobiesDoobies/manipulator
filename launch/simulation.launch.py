@@ -3,6 +3,7 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from ament_index_python.packages import get_package_share_directory
 
+from launch_ros.actions import Node
 
 def generate_launch_description():
     gazebo = IncludeLaunchDescription(
@@ -28,16 +29,18 @@ def generate_launch_description():
                 "launch",
                 "moveit.launch.py"
             ),
-            launch_arguments={"is_sim": "True"}.items()
+            launch_arguments={"is_sim": "True"}.items(),
         )
     
-    # remote_interface = IncludeLaunchDescription(
-    #         os.path.join(
-    #             get_package_share_directory("arduinobot_remote"),
-    #             "launch",
-    #             "remote_interface.launch.py"
-    #         ),
-    #     )
+    remote_interface = IncludeLaunchDescription(
+            os.path.join(
+                get_package_share_directory("mobile_bot"),
+                "launch",
+                "remote_interface.launch.py"
+            ),
+        )
+
+
     
     teleop_keyboard = IncludeLaunchDescription(
         os.path.join(
@@ -51,6 +54,6 @@ def generate_launch_description():
         gazebo,
         controller,
         moveit,
-        teleop_keyboard
-        # remote_interface,
+        remote_interface,
+        teleop_keyboard,
     ])
