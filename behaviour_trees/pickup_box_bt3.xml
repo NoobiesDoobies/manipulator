@@ -1,0 +1,9 @@
+<root main_tree_to_execute="MainTree">
+    <BehaviorTree ID="MainTree">
+        <Sequence name="root_sequence">
+            <RotateToFindObject name="rotate_to_find_object" angular_speed="0.01"/>
+            <!-- <ApproachObject name="approach_object" stop_distance="0.3"/> -->
+            
+        </Sequence>
+    </BehaviorTree>
+</root>
