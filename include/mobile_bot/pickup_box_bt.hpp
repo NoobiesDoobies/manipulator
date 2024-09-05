@@ -10,7 +10,7 @@
 #include "std_msgs/msg/float32.hpp"
 #include "std_msgs/msg/bool.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
-
+#include "geometry_msgs/msg/pose_stamped.hpp"
 
 class RotateToFindObject: public BT::StatefulActionNode
 {
@@ -18,7 +18,7 @@ class RotateToFindObject: public BT::StatefulActionNode
     RotateToFindObject(const std::string& name, const BT::NodeConfiguration& config):
       BT::StatefulActionNode(name, config){
         node_ = rclcpp::Node::make_shared(name);
-        twist_pub_ = node_->create_publisher<geometry_msgs::msg::TwistStamped>("/omnidirectional_controller/cmd_vel", 10);
+        twist_pub_ = node_->create_publisher<geometry_msgs::msg::TwistStamped>("/omni_wheel_controller/cmd_vel", 10);
         is_detected_sub_ = node_->create_subscription<std_msgs::msg::Bool>("/aruco_detect/is_detected", 10, std::bind(&RotateToFindObject::isDetectedCallback, this, std::placeholders::_1));
 
       }
@@ -82,19 +82,84 @@ class RotateToFindObject: public BT::StatefulActionNode
 
 // Example of custom SyncActionNode (synchronous action)
 // without ports.
-class ApproachObject : public BT::SyncActionNode
+class ApproachObject: public BT::StatefulActionNode
 {
-public:
-  ApproachObject(const std::string& name) :
-      BT::SyncActionNode(name, {})
-  {}
+  public:
+    ApproachObject(const std::string& name, const BT::NodeConfiguration& config):
+      BT::StatefulActionNode(name, config){
+        node_ = rclcpp::Node::make_shared(name);
+        twist_pub_ = node_->create_publisher<geometry_msgs::msg::TwistStamped>("/omni_wheel_controller/cmd_vel", 10);
+        object_pose_sub_ = node_->create_subscription<geometry_msgs::msg::PoseStamped>("/aruco_detect/object_pose", 10, std::bind(&ApproachObject::objectDistCallback, this, std::placeholders::_1));
+        is_detected_sub_ = node_->create_subscription<std_msgs::msg::Bool>("/aruco_detect/is_detected", 10, std::bind(&ApproachObject::isDetectedCallback, this, std::placeholders::_1));
+      }
 
-  // You must override the virtual function tick()
-  BT::NodeStatus tick() override
-  {
-    std::cout << "ApproachObject: " << this->name() << std::endl;
-    return BT::NodeStatus::SUCCESS;
-  }
+    static BT::PortsList providedPorts(){
+      return{
+          BT::InputPort<float>("stop_distance"),
+          BT::InputPort<float>("approaching_velocity"),
+          BT::InputPort<float>("distance_error"),
+        };
+    }
+
+    BT::NodeStatus onStart() override
+    {
+      getInput("stop_distance", stop_distance_);
+      getInput("approaching_velocity", approaching_velocity_);
+      getInput("distance_error", distance_error_);
+
+      RCLCPP_INFO(node_->get_logger(), "ApproachObject with velocity: %f and stop distance at: %f with error of: %f", approaching_velocity_, stop_distance_, distance_error_);
+      
+      return BT::NodeStatus::RUNNING;
+    }
+
+    BT::NodeStatus onRunning() override
+    {
+      if(abs(object_dist_ - stop_distance_) < distance_error_)
+      {
+        RCLCPP_INFO(node_->get_logger(), "Object reached");
+        return BT::NodeStatus::SUCCESS;
+      }
+      else{
+        RCLCPP_INFO(node_->get_logger(), "Approaching object");
+        auto twist_msg = std::make_shared<geometry_msgs::msg::TwistStamped>();
+        twist_msg->header.stamp = node_->now();
+        twist_msg->header.frame_id = "omnibot_base_link";
+        twist_msg->twist.linear.x = approaching_velocity_;
+
+        return BT::NodeStatus::RUNNING;
+      }
+
+
+    }
+
+    void onHalted() override
+    {
+      RCLCPP_INFO(node_->get_logger(), "ApproachObject halted");
+    }
+
+  private:
+    rclcpp::Node::SharedPtr node_;
+    rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr twist_pub_;
+    rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr object_pose_sub_;
+    rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr is_detected_sub_;
+    float stop_distance_;
+    float approaching_velocity_;
+    bool is_detected_;
+    float object_dist_;
+    float distance_error_;
+
+    void objectDistCallback(const geometry_msgs::msg::PoseStamped::SharedPtr msg)
+    {
+      object_dist_ = sqrt(pow(msg->pose.position.x, 2) + pow(msg->pose.position.y, 2));
+    }
+
+    void isDetectedCallback(const std_msgs::msg::Bool::SharedPtr msg)
+    {
+      is_detected_ = msg->data;
+    }
+
+
+ 
 };
 
 
@@ -116,6 +181,7 @@ public:
     std::cout << "Gripper close" << std::endl;
     return BT::NodeStatus::SUCCESS;
   }
+  
 
 private:
   bool _open;

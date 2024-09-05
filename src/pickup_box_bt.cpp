@@ -2,7 +2,6 @@
 #include "mobile_bot/pickup_box_bt.hpp"
 #include <filesystem>
 #include <iostream>
-// #define DEFAULT_BT_XML "/home/carlios/manipulator_ws/src/manipulator/behaviour_trees/pickup_box.xml"
 
 int main(int argc, char **argv){
     std::filesystem::path ros_ws_path = std::filesystem::current_path();
@@ -15,8 +14,12 @@ int main(int argc, char **argv){
     BT::NodeBuilder rotate_to_find_object = [](const std::string& name, const BT::NodeConfiguration& config){
         return std::make_unique<RotateToFindObject>(name, config);
     };
-
     factory.registerBuilder<RotateToFindObject>("RotateToFindObject", rotate_to_find_object);
+
+    BT::NodeBuilder approach_object = [](const std::string& name, const BT::NodeConfiguration& config){
+        return std::make_unique<ApproachObject>(name, config);
+    };
+    factory.registerBuilder<ApproachObject>("ApproachObject", approach_object);
 
     auto tree = factory.createTreeFromFile(xml_path);
 
