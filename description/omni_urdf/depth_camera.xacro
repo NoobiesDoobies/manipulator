@@ -5,7 +5,7 @@
   <joint name="front_cam_joint" type="fixed">
     <parent link="base_frame_link" />
     <child link="front_cam_link" />
-    <origin xyz="-0.15 0 0.2" rpy="0 0 ${pi}" />
+    <origin xyz="-${base_length} 0 0" rpy="0 0 ${pi}" />
   </joint>
 
   <link name="front_cam_link">

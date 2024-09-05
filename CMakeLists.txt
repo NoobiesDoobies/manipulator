@@ -23,6 +23,8 @@ find_package(builtin_interfaces REQUIRED)
 find_package(unique_identifier_msgs REQUIRED)
 find_package(manipulator_msgs REQUIRED)
 find_package(behaviortree_cpp_v3 REQUIRED)
+find_package(OpenCV 4.5 REQUIRED)
+find_package(cv_bridge REQUIRED)
 
 add_library(task_server SHARED src/task_server.cpp)
 
@@ -76,11 +78,11 @@ ament_target_dependencies(pickup_box_bt
   "rclcpp"
   "rclcpp_action"
   "rclcpp_components"
-  "moveit_ros_planning_interface"
   "unique_identifier_msgs"
   "builtin_interfaces"
   "geometry_msgs"
   "std_msgs"
+  "geometry_msgs"
   "sensor_msgs"
   "action_msgs"
   "manipulator_msgs"
@@ -89,6 +91,28 @@ ament_target_dependencies(pickup_box_bt
 
 install(TARGETS
   pickup_box_bt
+  DESTINATION lib/${PROJECT_NAME})
+
+
+add_executable(detect_aruco src/detect_aruco.cpp)
+ament_target_dependencies(detect_aruco
+  "rclcpp"
+  "rclcpp_action"
+  "rclcpp_components"
+  "unique_identifier_msgs"
+  "builtin_interfaces"
+  "geometry_msgs"
+  "std_msgs"
+  "sensor_msgs"
+  "geometry_msgs"
+  "action_msgs"
+  "manipulator_msgs"
+  "OpenCV"
+  "cv_bridge"
+)
+
+install(TARGETS
+  detect_aruco
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)

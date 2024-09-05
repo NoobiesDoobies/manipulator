@@ -12,7 +12,7 @@
       <parent link="${parent}" />
       <child link="base_frame_link" />
     </joint>
-
+    
     <link name="base_frame_link">
       <visual>
         <geometry>
