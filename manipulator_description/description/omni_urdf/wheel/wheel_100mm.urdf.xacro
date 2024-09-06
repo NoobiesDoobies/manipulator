@@ -11,13 +11,13 @@
     <link name="${prefix}_link">
       <visual>
         <geometry>
-          <mesh filename="file://$(find mobile_bot)/description/omni_urdf/STL/omni_barrel_100mm.stl" />
+          <mesh filename="file://$(find manipulator_description)/description/omni_urdf/STL/omni_barrel_100mm.stl" />
         </geometry>
         <material name="black"/>
       </visual>
       <collision>
         <geometry>
-          <mesh filename="file://$(find mobile_bot)/description/omni_urdf/STL/omni_barrel_100mm.stl" />
+          <mesh filename="file://$(find manipulator_description)/description/omni_urdf/STL/omni_barrel_100mm.stl" />
         </geometry>
       </collision>
       <inertial>
@@ -67,7 +67,7 @@
     <link name="${prefix}_housing_link">
       <visual>
         <geometry>
-          <mesh filename="file://$(find mobile_bot)/description/omni_urdf/STL/omni_housing_100mm.stl" />
+          <mesh filename="file://$(find manipulator_description)/description/omni_urdf/STL/omni_housing_100mm.stl" />
         </geometry>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <material name="gray"/>

@@ -10,7 +10,7 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
-    manipulator_description_dir = get_package_share_directory('mobile_bot')
+    manipulator_description_dir = get_package_share_directory('manipulator_description')
 
     model_arg = DeclareLaunchArgument(name='model', default_value=os.path.join(
                                         manipulator_description_dir, 'description', 'robot.urdf.xacro'

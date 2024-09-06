@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:include filename="$(find mobile_bot)/description/omni_urdf/base/base.gazebo.xacro" />
+  <xacro:include filename="$(find manipulator_description)/description/omni_urdf/base/base.gazebo.xacro" />
 
   <xacro:property name="base_length" value="1.5" />
   <xacro:property name="base_height" value="0.1" />

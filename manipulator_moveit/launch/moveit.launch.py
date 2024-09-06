@@ -17,18 +17,18 @@ def generate_launch_description():
     )
 
     moveit_config = (
-        MoveItConfigsBuilder("manipulator", package_name="mobile_bot")
+        MoveItConfigsBuilder("manipulator", package_name="manipulator_moveit")
         .robot_description(file_path=os.path.join(
-            get_package_share_directory("mobile_bot"),
+            get_package_share_directory("manipulator_description"),
             "description",
             "robot.urdf.xacro"
             )
         )
-        .robot_description_semantic(file_path="config/moveit/manipulator.srdf")
-        .trajectory_execution(file_path="config/moveit/moveit_controllers.yaml")
-        .robot_description_kinematics(file_path="config/moveit/kinematics.yaml")
-        .joint_limits(file_path="config/moveit/joint_limits.yaml")
-        .pilz_cartesian_limits(file_path="config/moveit/pilz_cartesian_limits.yaml")
+        .robot_description_semantic(file_path="config/manipulator.srdf")
+        .trajectory_execution(file_path="config/moveit_controllers.yaml")
+        .robot_description_kinematics(file_path="config/kinematics.yaml")
+        .joint_limits(file_path="config/joint_limits.yaml")
+        .pilz_cartesian_limits(file_path="config/pilz_cartesian_limits.yaml")
         .to_moveit_configs()
     )
 
@@ -44,7 +44,7 @@ def generate_launch_description():
 
     # RViz
     rviz_config = os.path.join(
-        get_package_share_directory("mobile_bot"),
+        get_package_share_directory("manipulator_moveit"),
             "rviz",
             "moveit_config.rviz",
     )

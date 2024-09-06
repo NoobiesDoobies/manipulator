@@ -1,0 +1,3 @@
+<Repeat name="RepeatUntilSuccess" num_success="-1">
+  <DebugPrint msg="test"/>
+</Repeat>

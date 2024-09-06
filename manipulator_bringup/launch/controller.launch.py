@@ -22,7 +22,7 @@ def generate_launch_description():
             [
                 "xacro ",
                 os.path.join(
-                    get_package_share_directory("mobile_bot"),
+                    get_package_share_directory("manipulator_description"),
                     "description",
                     "robot.urdf.xacro",
                 ),
@@ -46,7 +46,7 @@ def generate_launch_description():
             {"robot_description": robot_description,
              "use_sim_time": is_sim},
             os.path.join(
-                get_package_share_directory("mobile_bot"),
+                get_package_share_directory("manipulator_bringup"),
                 "config",
                 "ros2_control_params.yaml",
             ),

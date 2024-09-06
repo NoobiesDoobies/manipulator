@@ -11,17 +11,17 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
-    mobile_bot_description_dir = get_package_share_directory('mobile_bot')
-    mobile_bot_description_share = os.path.join(get_package_prefix('mobile_bot'), 'share')
+    manipulator_description_description_dir = get_package_share_directory('manipulator_description')
+    manipulator_description_description_share = os.path.join(get_package_prefix('manipulator_description'), 'share')
     gazebo_ros_dir = get_package_share_directory('gazebo_ros')
 
     model_arg = DeclareLaunchArgument(name='model', default_value=os.path.join(
-                                        mobile_bot_description_dir, 'description', 'robot.urdf.xacro'
+                                        manipulator_description_description_dir, 'description', 'robot.urdf.xacro'
                                         ),
                                       description='Absolute path to robot urdf file'
     )
 
-    env_var = SetEnvironmentVariable('GAZEBO_MODEL_PATH', mobile_bot_description_share)
+    env_var = SetEnvironmentVariable('GAZEBO_MODEL_PATH', manipulator_description_description_share)
 
     robot_description = ParameterValue(Command(['xacro ', LaunchConfiguration('model')]),
                                        value_type=str)
@@ -33,7 +33,7 @@ def generate_launch_description():
     )
 
     world_file = os.path.join(
-        get_package_share_directory("mobile_bot"),
+        get_package_share_directory("manipulator_description"),
         # "worlds", "simple_wall_following.world"
         # "worlds", "maze_3_6x6.world"
         # "worlds", "self_made_maze.world"
@@ -61,7 +61,7 @@ def generate_launch_description():
     )
 
     spawn_robot = Node(package='gazebo_ros', executable='spawn_entity.py',
-                        arguments=['-entity', 'mobile_bot',
+                        arguments=['-entity', 'manipulator_description',
                                    '-topic', 'robot_description',
                                       '-x', '0', '-y', '0', '-z', '0.3',
                                   ],

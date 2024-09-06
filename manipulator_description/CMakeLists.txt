@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(mobile_bot)
+project(manipulator_description)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -21,6 +21,7 @@ find_package(rclpy REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(builtin_interfaces REQUIRED)
 find_package(unique_identifier_msgs REQUIRED)
+<<<<<<< HEAD:CMakeLists.txt
 find_package(manipulator_msgs REQUIRED)
 find_package(behaviortree_cpp_v3 REQUIRED)
 find_package(OpenCV 4.5 REQUIRED)
@@ -67,6 +68,9 @@ install(TARGETS
   RUNTIME DESTINATION bin
   DESTINATION lib/${PROJECT_NAME}
 )
+=======
+
+>>>>>>> 5892699 (reconfigure workspace):manipulator_description/CMakeLists.txt
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -128,6 +132,7 @@ if(BUILD_TESTING)
 endif()
 
 install(
+<<<<<<< HEAD:CMakeLists.txt
   DIRECTORY description launch config rviz worlds behaviour_trees
   DESTINATION share/${PROJECT_NAME}
 )
@@ -137,6 +142,12 @@ install(PROGRAMS
   DESTINATION lib/${PROJECT_NAME}
 )
 
+=======
+  DIRECTORY description launch rviz worlds config
+  DESTINATION share/${PROJECT_NAME}
+)
+
+>>>>>>> 5892699 (reconfigure workspace):manipulator_description/CMakeLists.txt
 # rosidl_generate_interfaces(${PROJECT_NAME}
 #   "action/ManipulatorTask.action"
 #   DEPENDENCIES builtin_interfaces geometry_msgs std_msgs sensor_msgs unique_identifier_msgs action_msgs
