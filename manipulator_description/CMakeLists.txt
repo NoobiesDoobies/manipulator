@@ -21,103 +21,11 @@ find_package(rclpy REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(builtin_interfaces REQUIRED)
 find_package(unique_identifier_msgs REQUIRED)
-<<<<<<< HEAD:CMakeLists.txt
 find_package(manipulator_msgs REQUIRED)
 find_package(behaviortree_cpp_v3 REQUIRED)
 find_package(OpenCV 4.5 REQUIRED)
 find_package(cv_bridge REQUIRED)
 
-add_library(task_server SHARED src/task_server.cpp)
-
-include_directories(
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-
-target_include_directories(task_server PRIVATE
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-  ${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp
-  )
-  
-
-target_compile_definitions(task_server
-    PRIVATE "TASK_SERVER_CPP_BUILDING_DLL")
-  ament_target_dependencies(task_server
-    "rclcpp"
-    "rclcpp_action"
-    "rclcpp_components"
-    "moveit_ros_planning_interface"
-    "unique_identifier_msgs"
-    "builtin_interfaces"
-    "geometry_msgs"
-    "std_msgs"
-    "sensor_msgs"
-    "action_msgs"
-    "manipulator_msgs"
-    
-    )
-  rclcpp_components_register_node(task_server 
-    PLUGIN "mobile_bot_remote::TaskServer" 
-    EXECUTABLE task_server_node
-)
-
-install(TARGETS 
-  task_server
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin
-  DESTINATION lib/${PROJECT_NAME}
-)
-=======
-
->>>>>>> 5892699 (reconfigure workspace):manipulator_description/CMakeLists.txt
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
-
-
-
-add_executable(pickup_box_bt src/pickup_box_bt.cpp)
-ament_target_dependencies(pickup_box_bt
-  "rclcpp"
-  "rclcpp_action"
-  "rclcpp_components"
-  "unique_identifier_msgs"
-  "builtin_interfaces"
-  "geometry_msgs"
-  "std_msgs"
-  "geometry_msgs"
-  "sensor_msgs"
-  "action_msgs"
-  "manipulator_msgs"
-  "behaviortree_cpp_v3"
-)
-
-install(TARGETS
-  pickup_box_bt
-  DESTINATION lib/${PROJECT_NAME})
-
-
-add_executable(detect_aruco src/detect_aruco.cpp)
-ament_target_dependencies(detect_aruco
-  "rclcpp"
-  "rclcpp_action"
-  "rclcpp_components"
-  "unique_identifier_msgs"
-  "builtin_interfaces"
-  "geometry_msgs"
-  "std_msgs"
-  "sensor_msgs"
-  "geometry_msgs"
-  "action_msgs"
-  "manipulator_msgs"
-  "OpenCV"
-  "cv_bridge"
-)
-
-install(TARGETS
-  detect_aruco
-  DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -132,22 +40,10 @@ if(BUILD_TESTING)
 endif()
 
 install(
-<<<<<<< HEAD:CMakeLists.txt
-  DIRECTORY description launch config rviz worlds behaviour_trees
-  DESTINATION share/${PROJECT_NAME}
-)
-
-install(PROGRAMS
-  behaviour_trees/pickup_box.py
-  DESTINATION lib/${PROJECT_NAME}
-)
-
-=======
   DIRECTORY description launch rviz worlds config
   DESTINATION share/${PROJECT_NAME}
 )
 
->>>>>>> 5892699 (reconfigure workspace):manipulator_description/CMakeLists.txt
 # rosidl_generate_interfaces(${PROJECT_NAME}
 #   "action/ManipulatorTask.action"
 #   DEPENDENCIES builtin_interfaces geometry_msgs std_msgs sensor_msgs unique_identifier_msgs action_msgs
