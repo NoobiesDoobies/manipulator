@@ -103,12 +103,17 @@ private:
         RCLCPP_INFO(this->get_logger(), "Depth image received: width=%d, height=%d, encoding=%s",
                     msg->width, msg->height, msg->encoding.c_str());
 
+        // resize depth amage
+        cv::Mat resized_image;
+        cv::resize(cv_ptr->image, resized_image, cv::Size(), 0.5, 0.5);  // Resizing by 50%
+
+
         // Get depth information of the center of the detected object
         if (object_center_.x != 0 && object_center_.y != 0)
         {
             cv::Point2i center = object_center_;
             // Use 3x3 kernel to get the average depth value
-            cv::Mat depth_roi = cv_ptr->image(cv::Rect(center.x - 1, center.y - 1, 3, 3));
+            cv::Mat depth_roi = resized_image(cv::Rect(center.x - 1, center.y - 1, 3, 3));
             // Print out the depth values
             for (int i = 0; i < depth_roi.rows; i++)
             {
@@ -122,14 +127,12 @@ private:
         }
 
         // Draw the center coordinate of each marker
-        cv::circle(cv_ptr->image, object_center_, 5, cv::Scalar(0, 0, 255), -1);  // Draw a red circle at the center
+        cv::circle(resized_image, object_center_, 5, cv::Scalar(0, 0, 255), -1);  // Draw a red circle at the center
 
         // Convert cv::Mat back to sensor_msgs::Image and publish
-        sensor_msgs::msg::Image::SharedPtr processed_image_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "32FC1", cv_ptr->image).toImageMsg();
+        sensor_msgs::msg::Image::SharedPtr processed_image_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "32FC1", resized_image).toImageMsg();
         depth_image_publisher_->publish(*processed_image_msg);
 
-        // display image
-        cv::imshow("Depth Image", cv_ptr->image);
     }   
 
     rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr is_detected_publisher_;

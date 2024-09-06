@@ -5,7 +5,7 @@
 
 int main(int argc, char **argv){
     std::filesystem::path ros_ws_path = std::filesystem::current_path();
-    std::string xml_file_name = "/src/manipulator/behaviour_trees/pickup_box_bt3.xml";
+    std::string xml_file_name = "/src/manipulator_bt/behaviour_trees/pickup_box_bt3.xml";
     std::string xml_path = ros_ws_path.string() + xml_file_name;
 
     rclcpp::init(argc, argv);
