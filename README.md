@@ -3,6 +3,8 @@
 This repository contains the necessary files to control a mobile robot equipped with a manipulator. The manipulator can perform various tasks using ROS 2 and integrates the MoveIt motion planning framework along with the Behavior Tree framework.
 ***
 
+![moveit](https://github.com/NoobiesDoobies/manipulator/blob/main/assets/moveit.gif)
+
 ## Installation Instructions
 Follow the steps below to set up the project and run it:
 
