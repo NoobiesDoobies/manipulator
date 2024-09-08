@@ -67,6 +67,6 @@ def generate_launch_description():
         controller,
         moveit,
         rviz_node,
-        # remote_interface,
+        remote_interface,
         teleop_keyboard,
     ])
