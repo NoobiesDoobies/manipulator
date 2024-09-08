@@ -7,7 +7,7 @@
 
 #include <memory>
 
-namespace mobile_bot_remote
+namespace manipulator_server_remote
 {
     class TaskServer : public rclcpp::Node
     {
@@ -76,11 +76,19 @@ namespace mobile_bot_remote
 
             std::string task_string = goal_handle->get_goal()->task_string;
 
+            RCLCPP_INFO(get_logger(), "Task string: %s", task_string.c_str());
+
             if(task_string == "open-gripper"){
                 // arm_joint_goal = arm_joint_group_positions;
+                RCLCPP_INFO(get_logger(), "Opening gripper");
                 arm_joint_goal = {0.0, 0.0, 0.0};
                 gripper_joint_goal = {-1.0, 1.0};
             } 
+            else if(task_string == "close-gripper"){
+                RCLCPP_INFO(get_logger(), "Closing gripper");
+                arm_joint_goal = {0.0, 0.0, 0.0};
+                gripper_joint_goal = {0.0, 0.0};
+            }
             else if(task_string == "lower-arm-and-grip"){
                 arm_joint_goal = {-0.11, -1, 0.212};
                 gripper_joint_goal = {-0.25, 0.25};
@@ -91,6 +99,8 @@ namespace mobile_bot_remote
             }
             else{
                 RCLCPP_ERROR(get_logger(), "Invalid task string");
+                result->success = false;
+                goal_handle->abort(result);
             }
 
 
@@ -99,9 +109,12 @@ namespace mobile_bot_remote
             bool gripper_within_bounds = gripper_move_group.setJointValueTarget(gripper_joint_goal);
             if (!arm_within_bounds | !gripper_within_bounds)
             {
-            RCLCPP_WARN(get_logger(),
-                        "Target joint position(s) were outside of limits, but we will plan and clamp to the limits ");
-            return;
+                RCLCPP_WARN(get_logger(),
+                    "Target joint position(s) were outside of limits, but we will plan and clamp to the limits ");
+
+                result->success = false;
+                goal_handle->abort(result);
+                return;
             }
 
 
@@ -120,6 +133,8 @@ namespace mobile_bot_remote
             }    
             else
             {
+                result->success = false;
+                goal_handle->abort(result);  // Added this line
                 RCLCPP_ERROR(get_logger(), "One or more planners failed!");
                 return;
             }
@@ -133,4 +148,4 @@ namespace mobile_bot_remote
     };
 }
 
-RCLCPP_COMPONENTS_REGISTER_NODE(mobile_bot_remote::TaskServer);
+RCLCPP_COMPONENTS_REGISTER_NODE(manipulator_server_remote::TaskServer);

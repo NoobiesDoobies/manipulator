@@ -21,12 +21,24 @@ int main(int argc, char **argv){
     };
     factory.registerBuilder<ApproachObject>("ApproachObject", approach_object);
 
+    BT::NodeBuilder move_manipulator = [](const std::string& name, const BT::NodeConfiguration& config){
+        return std::make_unique<MoveManipulator>(name, config);
+    };
+    factory.registerBuilder<MoveManipulator>("MoveManipulator", move_manipulator);
+    // Create an executor to spin the node
+    // auto node = std::make_shared<rclcpp::Node>("move_manipulator_node");
+    // rclcpp::executors::SingleThreadedExecutor executor;
+    // executor.add_node(node);
+
     auto tree = factory.createTreeFromFile(xml_path);
 
     BT::NodeStatus status = BT::NodeStatus::RUNNING;
     while(rclcpp::ok() && status == BT::NodeStatus::RUNNING){
         status = tree.tickRoot();
+        // executor.spin_some(); 
     }
 
+
+    rclcpp::shutdown();
     return 0;
 }

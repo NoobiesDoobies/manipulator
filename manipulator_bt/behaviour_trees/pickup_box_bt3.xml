@@ -1,9 +1,11 @@
 <root main_tree_to_execute="MainTree">
     <BehaviorTree ID="MainTree">
         <Sequence name="root_sequence">
-            <RotateToFindObject name="rotate_to_find_object" angular_speed="0.01"/>
-            <ApproachObject name="approach_object" approaching_velocity="0.3" stop_distance="0.6" distance_error="0.05"/>
-            
+            <!-- <RotateToFindObject name="rotate_to_find_object" angular_speed="0.01"/>
+            <ApproachObject name="approach_object" approaching_velocity="0.3" stop_distance="0.6" distance_error="0.05"/> -->
+            <MoveManipulator name="open_gripper" task_string="open-gripper"/>
+            <MoveManipulator name="close_gripper" task_string="close-gripper"/>
+
         </Sequence>
     </BehaviorTree>
 </root>

@@ -48,9 +48,34 @@ ament_target_dependencies(pickup_box_bt
   "behaviortree_cpp_v3"
 )
 
+
+
 install(TARGETS
   pickup_box_bt
   DESTINATION lib/${PROJECT_NAME})
+
+
+  add_executable(manipulator_client src/manipulator_client.cpp)
+  ament_target_dependencies(manipulator_client
+    "rclcpp"
+    "rclcpp_action"
+    "rclcpp_components"
+    "unique_identifier_msgs"
+    "builtin_interfaces"
+    "geometry_msgs"
+    "std_msgs"
+    "geometry_msgs"
+    "sensor_msgs"
+    "action_msgs"
+    "manipulator_msgs"
+  )
+  
+  
+  
+  install(TARGETS
+  manipulator_client
+    DESTINATION lib/${PROJECT_NAME})
+  
 
 
 add_executable(detect_aruco src/detect_aruco.cpp)
@@ -89,11 +114,6 @@ endif()
 install(
   DIRECTORY  launch  behaviour_trees
   DESTINATION share/${PROJECT_NAME}
-)
-
-install(PROGRAMS
-  behaviour_trees/pickup_box.py
-  DESTINATION lib/${PROJECT_NAME}
 )
 
 # rosidl_generate_interfaces(${PROJECT_NAME}

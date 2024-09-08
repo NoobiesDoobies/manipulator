@@ -5,12 +5,16 @@
 #include "behaviortree_cpp_v3/bt_factory.h"
 
 #include "rclcpp/rclcpp.hpp"
+#include "rclcpp_action/rclcpp_action.hpp"
+#include "rclcpp_components/register_node_macro.hpp"
+
 #include "std_msgs/msg/string.hpp"
 #include "std_msgs/msg/int32.hpp"
 #include "std_msgs/msg/float32.hpp"
 #include "std_msgs/msg/bool.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
+#include "manipulator_msgs/action/manipulator_task.hpp"
 
 class RotateToFindObject: public BT::StatefulActionNode
 {
@@ -128,8 +132,6 @@ class ApproachObject: public BT::StatefulActionNode
 
         return BT::NodeStatus::RUNNING;
       }
-
-
     }
 
     void onHalted() override
@@ -163,28 +165,96 @@ class ApproachObject: public BT::StatefulActionNode
 };
 
 
-class GripperInterface
+
+
+class MoveManipulator : public BT::SyncActionNode
 {
 public:
-  GripperInterface() : _open(true) {}
+    MoveManipulator(const std::string& name, const BT::NodeConfiguration& config)
+        : BT::SyncActionNode(name, config), result_code_(rclcpp_action::ResultCode::UNKNOWN)
+    {
+        node_ = rclcpp::Node::make_shared(name);
+        manipulator_task_client_ = rclcpp_action::create_client<manipulator_msgs::action::ManipulatorTask>(node_, "task_server");
+        timer_ = node_->create_wall_timer( std::chrono::milliseconds(500), std::bind(&MoveManipulator::send_goal, this));
+    }
 
-  BT::NodeStatus open()
-  {
-    _open = true;
-    std::cout << "Gripper open" << std::endl;
-    return BT::NodeStatus::SUCCESS;
-  }
+    static BT::PortsList providedPorts()
+    {
+        return {BT::InputPort<std::string>("task_string")};
+    }
+    
+    BT::NodeStatus tick() override
+    {
+        if (!getInput<std::string>("task_string", task_string_))
+        {
+            throw BT::RuntimeError("missing required input [task_string]");
+        }
+        while(rclcpp::ok() && result_code_ == rclcpp_action::ResultCode::UNKNOWN)
+        {
+            rclcpp::spin_some(node_);
+        }
+        return BT::NodeStatus::SUCCESS;
+    }
 
-  BT::NodeStatus close()
-  {
-    _open = false;
-    std::cout << "Gripper close" << std::endl;
-    return BT::NodeStatus::SUCCESS;
-  }
-  
+
 
 private:
-  bool _open;
+    rclcpp::Node::SharedPtr node_;
+    rclcpp_action::Client<manipulator_msgs::action::ManipulatorTask>::SharedPtr manipulator_task_client_; // Action client as a class member
+    rclcpp_action::ClientGoalHandle<manipulator_msgs::action::ManipulatorTask>::SharedPtr goal_handle_;
+    rclcpp_action::ResultCode result_code_;
+    rclcpp::TimerBase::SharedPtr timer_;
+    std::string task_string_;
+    void send_goal()
+    {
+        // if (!manipulator_task_client_->wait_for_action_server(std::chrono::seconds(10))) {
+        //     RCLCPP_ERROR(node_->get_logger(), "Action server not available after waiting");
+        //     rclcpp::shutdown();
+        //     return;
+        // }
+
+        auto goal_msg = manipulator_msgs::action::ManipulatorTask::Goal();
+        goal_msg.task_string = task_string_;
+
+        RCLCPP_INFO(node_->get_logger(), "Sending goal %s", task_string_.c_str());
+
+        auto send_goal_options = rclcpp_action::Client<manipulator_msgs::action::ManipulatorTask>::SendGoalOptions();
+        send_goal_options.goal_response_callback =
+            std::bind(&MoveManipulator::goalResponseCallback, this, std::placeholders::_1);
+        send_goal_options.feedback_callback =
+            std::bind(&MoveManipulator::feedbackCallback, this, std::placeholders::_1, std::placeholders::_2);
+        send_goal_options.result_callback =
+            std::bind(&MoveManipulator::resultCallback, this, std::placeholders::_1);
+
+        manipulator_task_client_->async_send_goal(goal_msg, send_goal_options);
+    }
+    void goalResponseCallback(std::shared_ptr<rclcpp_action::ClientGoalHandle<manipulator_msgs::action::ManipulatorTask>> future)
+    {
+        goal_handle_ = future;
+        auto goal_handle = future;
+        if (!goal_handle) {
+            RCLCPP_ERROR(node_->get_logger(), "Goal was rejected by server");
+        } else {
+            RCLCPP_INFO(node_->get_logger(), "Goal accepted by server, waiting for result");
+        }
+    }
+
+    void feedbackCallback(
+        rclcpp_action::ClientGoalHandle<manipulator_msgs::action::ManipulatorTask>::SharedPtr,
+        const std::shared_ptr<const manipulator_msgs::action::ManipulatorTask::Feedback> feedback)
+    {
+        RCLCPP_INFO(node_->get_logger(), "Received feedback: %d%%", feedback->percentage);
+    }
+
+    void resultCallback(const rclcpp_action::ClientGoalHandle<manipulator_msgs::action::ManipulatorTask>::WrappedResult & result)
+    {
+        result_code_ = result.code;
+        if (result.result) {
+            std::stringstream ss;
+            ss << "Result received: " << result.result->success;
+            RCLCPP_INFO(node_->get_logger(), ss.str().c_str());
+        }
+    }
 };
 
 #endif 

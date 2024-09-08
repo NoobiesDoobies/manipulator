@@ -53,7 +53,7 @@ target_compile_definitions(task_server
     
     )
   rclcpp_components_register_node(task_server 
-    PLUGIN "mobile_bot_remote::TaskServer" 
+    PLUGIN "manipulator_server_remote::TaskServer" 
     EXECUTABLE task_server_node
 )
 
