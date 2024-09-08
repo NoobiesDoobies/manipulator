@@ -14,8 +14,15 @@ int main(int argc, char **argv){
     auto move_manipulator_nh = std::make_shared<rclcpp::Node>("move_manipulator_client");
     BT::RosNodeParams move_manipulator_params;
     move_manipulator_params.nh = move_manipulator_nh;
-    move_manipulator_params.default_port_value = "task_server";
+    move_manipulator_params.default_port_value = "manipulator_task_server";
     factory.registerNodeType<MoveManipulator>("MoveManipulator", move_manipulator_params);
+
+
+    auto approach_object_nh = std::make_shared<rclcpp::Node>("approach_object_client");
+    BT::RosNodeParams approach_object_params;
+    approach_object_params.nh = approach_object_nh;
+    approach_object_params.default_port_value = "approach_object";
+    factory.registerNodeType<ApproachObject>("ApproachObject", approach_object_params);
 
     auto tree = factory.createTreeFromFile(xml_path);
 

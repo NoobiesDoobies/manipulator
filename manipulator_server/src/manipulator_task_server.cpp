@@ -13,11 +13,11 @@ namespace manipulator_server_remote
     {
     public:
         explicit TaskServer(const rclcpp::NodeOptions &options = rclcpp::NodeOptions())
-            : Node("task_server", options)
+            : Node("manipulator_task_server", options)
         {
             RCLCPP_INFO(get_logger(), "Task server started");
             action_server_ = rclcpp_action::create_server<manipulator_msgs::action::ManipulatorTask>(
-                this, "task_server",
+                this, "manipulator_task_server",
                 std::bind(&TaskServer::goalCallback, this, std::placeholders::_1, std::placeholders::_2),
                 std::bind(&TaskServer::cancelCallback, this, std::placeholders::_1),
                 std::bind(&TaskServer::acceptedCallback, this, std::placeholders::_1));

@@ -90,25 +90,25 @@
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
     <state world_name='default'>
-      <sim_time>1081 518000000</sim_time>
-      <real_time>78 824258764</real_time>
-      <wall_time>1725461194 99287888</wall_time>
-      <iterations>78647</iterations>
+      <sim_time>1160 91000000</sim_time>
+      <real_time>21 616656152</real_time>
+      <wall_time>1725804111 587770097</wall_time>
+      <iterations>21479</iterations>
       <model name='aruco_marker'>
-        <pose>-2.35803 0.304206 -350252 -0.000978 -0.382776 -2.5e-05</pose>
+        <pose>-2.65401 0.304756 -586376 -0.000247 1.3469 0.001309</pose>
         <scale>2890.64 1 1</scale>
         <link name='link'>
-          <pose>-2.35803 0.304206 -350252 -0.000978 -0.382776 -2.5e-05</pose>
-          <velocity>-0.003767 7e-06 -2620.13 -8e-06 0.181946 4.2e-05</velocity>
-          <acceleration>0 0 -9.8 0 -0 1e-06</acceleration>
+          <pose>-2.65401 0.304756 -586376 -0.000247 1.3469 0.001309</pose>
+          <velocity>-0.003767 7e-06 -3390.18 -6e-06 0.181946 4.8e-05</velocity>
+          <acceleration>0 0 -9.8 2e-06 -0 0</acceleration>
           <wrench>0 0 -0.0098 0 -0 0</wrench>
         </link>
       </model>
       <model name='aruco_marker_69_1'>
-        <pose>-3.69478 -0.005694 0.094836 0 -0 0</pose>
+        <pose>-3.54312 -0.005694 0.094836 0 -0 0</pose>
         <scale>1 1.24252 1.15104</scale>
         <link name='link'>
-          <pose>-3.69478 -0.005694 0.094836 0 -0 0</pose>
+          <pose>-3.54312 -0.005694 0.094836 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -19.0122 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
@@ -130,7 +130,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>-2.41892 -2.29609 1.17355 -0 0.58568 2.28127</pose>
+        <pose>-0.207324 -1.69808 2.38826 -0 0.58568 2.28127</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>

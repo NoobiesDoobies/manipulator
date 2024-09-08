@@ -12,6 +12,12 @@ class ArucoDetectorNode : public rclcpp::Node
 public:
     ArucoDetectorNode() : Node("aruco_detector_node")
     {
+        // Initialize camera parameters
+        camera_matrix_ = (cv::Mat_<double>(3, 3) << 337.2084410968044, 0.0, 320.5,
+                                                    0.0, 337.2084410968044, 200.5,
+                                                    0.0, 0.0, 1.0);
+        dist_coeffs_ = (cv::Mat_<double>(1, 5) << 0.0, 0.0, 0.0, 0.0, 0.0);
+
         // Create publisher for is_detected topic
         is_detected_publisher_ = this->create_publisher<std_msgs::msg::Bool>("/aruco_detect/is_detected", 10);
 
@@ -25,11 +31,10 @@ public:
         image_subscriber_ = this->create_subscription<sensor_msgs::msg::Image>(
                 "omni_bot/front/image_raw", 10, std::bind(&ArucoDetectorNode::imageCallback, this, std::placeholders::_1));
 
-        depth_image_subscriber_ = this->create_subscription<sensor_msgs::msg::Image>(
-            "omni_bot/front/depth/image_raw", 10, std::bind(&ArucoDetectorNode::depthImageCallback, this, std::placeholders::_1));
+        // depth_image_subscriber_ = this->create_subscription<sensor_msgs::msg::Image>(
+        //     "omni_bot/front/depth/image_raw", 10, std::bind(&ArucoDetectorNode::depthImageCallback, this, std::placeholders::_1));
 
         depth_image_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("/aruco_detect/depth/image", 10);
-
     }
 
 private:
@@ -49,7 +54,8 @@ private:
 
         // Resize image if too large
         cv::Mat resized_image;
-        cv::resize(cv_ptr->image, resized_image, cv::Size(), 0.5, 0.5);  // Resizing by 50%
+        float scale = 1;
+        cv::resize(cv_ptr->image, resized_image, cv::Size(), scale, scale);  // Resizing by 50%
 
         // Detect ArUco markers
         std::vector<int> marker_ids;
@@ -72,6 +78,45 @@ private:
             center *= (1.0 / marker_corners[i].size());
             object_center_ = center;  // Scale up the center coordinate
             cv::circle(resized_image, center, 5, cv::Scalar(0, 0, 255), -1);  // Draw a red circle at the center
+
+            // Define the 3D coordinates of the marker corners
+            std::vector<cv::Point3f> marker_corners_3d = {
+                cv::Point3f(-0.05, 0.05, 0),  // Top-left corner
+                cv::Point3f(0.05, 0.05, 0),   // Top-right corner
+                cv::Point3f(0.05, -0.05, 0),  // Bottom-right corner
+                cv::Point3f(-0.05, -0.05, 0)  // Bottom-left corner
+            };
+
+            // Estimate the pose of the marker
+            cv::Mat rvec, tvec;
+            bool success = cv::solvePnP(marker_corners_3d, marker_corners[i], camera_matrix_, dist_coeffs_, rvec, tvec);
+
+            if (success)
+            {
+                
+                // Convert the pose to a ROS message
+                geometry_msgs::msg::PoseStamped pose_msg;
+                pose_msg.header.stamp = this->now();
+                pose_msg.header.frame_id = "camera_frame";
+
+                // Convert rotation vector to quaternion
+                cv::Mat rotation_matrix;
+                cv::Rodrigues(rvec, rotation_matrix);
+                cv::Mat quaternion = cv::Mat::zeros(4, 1, CV_64F);
+                cv::Rodrigues(rotation_matrix, quaternion);
+
+                pose_msg.pose.position.x = tvec.at<double>(0);
+                pose_msg.pose.position.y = tvec.at<double>(1);
+                pose_msg.pose.position.z = tvec.at<double>(2);
+
+                pose_msg.pose.orientation.x = quaternion.at<double>(0);
+                pose_msg.pose.orientation.y = quaternion.at<double>(1);
+                pose_msg.pose.orientation.z = quaternion.at<double>(2);
+                pose_msg.pose.orientation.w = quaternion.at<double>(3);
+
+                // Publish the pose
+                pose_publisher_->publish(pose_msg);
+            }
         }
 
         // Publish is_detected
@@ -79,12 +124,10 @@ private:
         is_detected.data = !marker_ids.empty();
         is_detected_publisher_->publish(is_detected);
 
-
-        // // Convert cv::Mat back to sensor_msgs::Image and publish
+        // Convert cv::Mat back to sensor_msgs::Image and publish
         sensor_msgs::msg::Image::SharedPtr processed_image_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", resized_image).toImageMsg();
         image_publisher_->publish(*processed_image_msg);
     }
-
 
     void depthImageCallback(const sensor_msgs::msg::Image::SharedPtr msg)
     {
@@ -100,13 +143,14 @@ private:
         }
 
         // Debugging: Log image dimensions and type
-        RCLCPP_INFO(this->get_logger(), "Depth image received: width=%d, height=%d, encoding=%s",
-                    msg->width, msg->height, msg->encoding.c_str());
+        // RCLCPP_INFO(this->get_logger(), "Depth image received: width=%d, height=%d, encoding=%s",
+        //             msg->width, msg->height, msg->encoding.c_str());
 
-        // resize depth amage
+        // Resize depth image
         cv::Mat resized_image;
-        cv::resize(cv_ptr->image, resized_image, cv::Size(), 0.5, 0.5);  // Resizing by 50%
+        float scale = 1;
 
+        cv::resize(cv_ptr->image, resized_image, cv::Size(), scale, scale);  // Resizing by 50%
 
         // Get depth information of the center of the detected object
         if (object_center_.x != 0 && object_center_.y != 0)
@@ -117,13 +161,13 @@ private:
             // Print out the depth values
             for (int i = 0; i < depth_roi.rows; i++)
             {
-                for (int j = 0; j < depth_roi.cols; j++)
-                {
-                    RCLCPP_INFO(this->get_logger(), "%f", depth_roi.at<float>(i, j));
-                }
+                // for (int j = 0; j < depth_roi.cols; j++)
+                // {
+                //     RCLCPP_INFO(this->get_logger(), "%f", depth_roi.at<float>(i, j));
+                // }
             }
             cv::Scalar mean_depth = cv::mean(depth_roi);
-            RCLCPP_INFO(this->get_logger(), "Mean depth at center: %f", mean_depth[0]);
+            // RCLCPP_INFO(this->get_logger(), "Mean depth at center: %f", mean_depth[0]);
         }
 
         // Draw the center coordinate of each marker
@@ -132,8 +176,7 @@ private:
         // Convert cv::Mat back to sensor_msgs::Image and publish
         sensor_msgs::msg::Image::SharedPtr processed_image_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "32FC1", resized_image).toImageMsg();
         depth_image_publisher_->publish(*processed_image_msg);
-
-    }   
+    }
 
     rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr is_detected_publisher_;
     rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pose_publisher_;
@@ -142,6 +185,8 @@ private:
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscriber_;
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr depth_image_subscriber_;
     cv::Point2f object_center_;
+    cv::Mat camera_matrix_;
+    cv::Mat dist_coeffs_;
 };
 
 int main(int argc, char** argv)
