@@ -23,9 +23,9 @@ find_package(builtin_interfaces REQUIRED)
 find_package(unique_identifier_msgs REQUIRED)
 find_package(manipulator_msgs REQUIRED)
 find_package(behaviortree_cpp_v3 REQUIRED)
+find_package(behaviortree_ros2 REQUIRED)
 find_package(OpenCV 4.5 REQUIRED)
 find_package(cv_bridge REQUIRED)
-
 
 
 include_directories(
@@ -45,7 +45,7 @@ ament_target_dependencies(pickup_box_bt
   "sensor_msgs"
   "action_msgs"
   "manipulator_msgs"
-  "behaviortree_cpp_v3"
+  "behaviortree_ros2"
 )
 
 

@@ -11,30 +11,16 @@ int main(int argc, char **argv){
     rclcpp::init(argc, argv);
     BT::BehaviorTreeFactory factory;
 
-    BT::NodeBuilder rotate_to_find_object = [](const std::string& name, const BT::NodeConfiguration& config){
-        return std::make_unique<RotateToFindObject>(name, config);
-    };
-    factory.registerBuilder<RotateToFindObject>("RotateToFindObject", rotate_to_find_object);
-
-    BT::NodeBuilder approach_object = [](const std::string& name, const BT::NodeConfiguration& config){
-        return std::make_unique<ApproachObject>(name, config);
-    };
-    factory.registerBuilder<ApproachObject>("ApproachObject", approach_object);
-
-    BT::NodeBuilder move_manipulator = [](const std::string& name, const BT::NodeConfiguration& config){
-        return std::make_unique<MoveManipulator>(name, config);
-    };
-    factory.registerBuilder<MoveManipulator>("MoveManipulator", move_manipulator);
-    // Create an executor to spin the node
-    // auto node = std::make_shared<rclcpp::Node>("move_manipulator_node");
-    // rclcpp::executors::SingleThreadedExecutor executor;
-    // executor.add_node(node);
+    auto move_manipulator_nh = std::make_shared<rclcpp::Node>("move_manipulator_client");
+    BT::RosNodeParams move_manipulator_params;
+    move_manipulator_params.nh = move_manipulator_nh;
+    move_manipulator_params.default_port_value = "task_server";
+    factory.registerNodeType<MoveManipulator>("MoveManipulator", move_manipulator_params);
 
     auto tree = factory.createTreeFromFile(xml_path);
 
-    BT::NodeStatus status = BT::NodeStatus::RUNNING;
-    while(rclcpp::ok() && status == BT::NodeStatus::RUNNING){
-        status = tree.tickRoot();
+    while(rclcpp::ok() ){
+        tree.tickWhileRunning();
         // executor.spin_some(); 
     }
 
