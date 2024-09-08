@@ -90,7 +90,7 @@ namespace manipulator_server_remote
                 gripper_joint_goal = {0.0, 0.0};
             }
             else if(task_string == "lower-arm-and-grip"){
-                arm_joint_goal = {-0.11, -1, 0.212};
+                arm_joint_goal = {-0.06, -1.36136, 0.837758};
                 gripper_joint_goal = {-0.25, 0.25};
             }
             else if(task_string == "raise-arm-and-grip"){

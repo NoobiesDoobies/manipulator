@@ -75,7 +75,8 @@ public:
     {
         return providedBasicPorts({
             BT::InputPort<float>("distance"),
-            BT::InputPort<float>("distance_threshold")
+            BT::InputPort<float>("distance_threshold"),
+            BT::InputPort<float>("approaching_velocity")
         });
     }
 
@@ -85,6 +86,7 @@ public:
         goal.distance_threshold = getInput<float>("distance_threshold").value();
         goal.target_pose_topic = "aruco_detect/object_pose";
         goal.is_object_detected_topic = "aruco_detect/is_detected";
+        goal.approaching_velocity = getInput<float>("approaching_velocity").value();
         return true;
     }
 

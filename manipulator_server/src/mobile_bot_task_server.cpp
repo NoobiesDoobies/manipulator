@@ -87,7 +87,7 @@ namespace mobile_bot_server_remote
 
             auto result = std::make_shared<manipulator_msgs::action::ApproachObjectTask::Result>();
 
-            if(abs((target_pose_.pose.position.z - goal_handle->get_goal()->distance) > goal_handle->get_goal()->distance_threshold) || !is_object_detected_.data){
+            while(abs((target_pose_.pose.position.z - goal_handle->get_goal()->distance) > goal_handle->get_goal()->distance_threshold) || !is_object_detected_.data){
                 
                 RCLCPP_INFO(get_logger(), "Approaching object at pose x: %f, y: %f, z: %f, dist: %f, thres: %f", target_pose_.pose.position.x, target_pose_.pose.position.y, target_pose_.pose.position.z, goal_handle->get_goal()->distance, goal_handle->get_goal()->distance_threshold);
                 geometry_msgs::msg::TwistStamped cmd_vel;
@@ -103,7 +103,7 @@ namespace mobile_bot_server_remote
                 //     cmd_vel.twist.linear.x = 0.3 * (cmd_vel.twist.linear.x/abs(cmd_vel.twist.linear.x));
                 // }
 
-                cmd_vel.twist.linear.x = 0.5 * (goal_handle->get_goal()->distance - target_pose_.pose.position.z)/abs(goal_handle->get_goal()->distance - target_pose_.pose.position.z);
+                cmd_vel.twist.linear.x = - goal_handle->get_goal()->approaching_velocity * (goal_handle->get_goal()->distance - target_pose_.pose.position.z)/abs(goal_handle->get_goal()->distance - target_pose_.pose.position.z);
                 cmd_vel.twist.linear.y = 0.0;
 
                 cmd_vel_pub_->publish(cmd_vel);
@@ -124,13 +124,11 @@ namespace mobile_bot_server_remote
         // create callback for subscription
         void targetPoseCallback(const geometry_msgs::msg::PoseStamped::SharedPtr msg)
         {
-            RCLCPP_INFO(get_logger(), "Received target pose");
             target_pose_ = *msg;
         }
 
         void isObjectDetectedCallback(const std_msgs::msg::Bool::SharedPtr msg)
         {
-            RCLCPP_INFO(get_logger(), "Received object detection status");
             is_object_detected_ = *msg;
         }
     

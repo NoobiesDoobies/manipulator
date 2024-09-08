@@ -1,10 +1,12 @@
 <root main_tree_to_execute="MainTree">
     <BehaviorTree ID="MainTree">
         <Sequence name="root_sequence">
-            <ApproachObject name="approach_object" distance="0.45" distance_threshold="0.06"/> 
+            <ApproachObject name="approach_object" distance="0.225" distance_threshold="0.06" approaching_velocity="0.4"/> 
             <MoveManipulator name="open_gripper" task_string="open-gripper"/>
-            <MoveManipulator name="close_gripper" task_string="close-gripper"/>
+            <MoveManipulator name="close_gripper" task_string="lower-arm-and-grip"/>
+            <MoveManipulator name="close_gripper" task_string="raise-arm-and-grip"/>
+
 
         </Sequence>
     </BehaviorTree>
-</root>
+</root> 

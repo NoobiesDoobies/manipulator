@@ -4,11 +4,17 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
-    task_server_node = Node(
+    manipulator_task_server = Node(
         package="manipulator_server",
-        executable="task_server_node",
+        executable="manipulator_task_server_node"
+    )
+
+    mobile_bot_task_server = Node(
+        package="manipulator_server",
+        executable="mobile_bot_task_server_node"
     )
 
     return LaunchDescription([
-        task_server_node,
+        manipulator_task_server,
+        mobile_bot_task_server
     ])
